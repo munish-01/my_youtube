@@ -5,15 +5,21 @@ import USER_LOGO from "../assets/user-icon.png";
 import { toggleMenu } from "../utils/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { YOUTUBE_SEARCH_API } from "../utils/constants";
-import { cacheResults } from "../utils/searchSlice";
+import { cacheResults, setQuery } from "../utils/searchSlice";
+import { useNavigate } from "react-router";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [ShowSuggestions, setShowSuggestions] = useState(false);
 
-  const searchCache = useSelector((store) => store.search);
+  const searchState = useSelector((store) => store.search);
   const dispatch = useDispatch();
+
+  // Keep redux query in sync so other components can react to it (e.g. Comments)
+  React.useEffect(() => {
+    dispatch(setQuery(searchQuery));
+  }, [searchQuery, dispatch]);
 
   /**
    *  searchCache = {
@@ -24,8 +30,8 @@ const Head = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (searchCache[searchQuery]) {
-        setSuggestions(searchCache[searchQuery]);
+      if (searchState?.cache && searchState.cache[searchQuery]) {
+        setSuggestions(searchState.cache[searchQuery]);
       } else {
         getSearchSugsestions();
       }
@@ -34,7 +40,7 @@ const Head = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [searchQuery]);
+  }, [searchQuery, searchState]);
 
   const getSearchSugsestions = async () => {
     const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
@@ -44,6 +50,8 @@ const Head = () => {
     // update cache
     dispatch(cacheResults({ [searchQuery]: json[1] }));
   };
+
+  const navigate = useNavigate();
 
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
@@ -72,7 +80,7 @@ const Head = () => {
           placeholder="Search"
           className="w-full h-10 px-4 border border-gray-300 rounded-l-full focus:outline-none focus:border-blue-500"
         />
-        <button className="h-10 px-6 border border-l-0 border-gray-300 rounded-r-full bg-gray-100 hover:bg-gray-200">
+        <button onClick={() => { dispatch(setQuery(searchQuery)); navigate("/?q=" + encodeURIComponent(searchQuery)); setShowSuggestions(false); }} className="h-10 px-6 border border-l-0 border-gray-300 rounded-r-full bg-gray-100 hover:bg-gray-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 text-gray-600"

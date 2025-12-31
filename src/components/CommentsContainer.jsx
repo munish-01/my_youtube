@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import CommentItem from "./CommentItem";
 import "./CommentsContainer.css";
 
@@ -93,7 +94,20 @@ const CommentsContainer = () => {
     sortBy === "newest" ? b.createdAt - a.createdAt : a.createdAt - b.createdAt
   );
 
-  const visible = sorted.slice(0, limit);
+  const searchQuery = useSelector((store) => store.search?.query || "");
+  const q = searchQuery.trim().toLowerCase();
+
+  const filtered = q
+    ? sorted.filter((c) => {
+        const inSelf =
+          c.name?.toLowerCase().includes(q) || c.comment?.toLowerCase().includes(q);
+        const inReplies =
+          c.replies && c.replies.some((r) => (r.name || "").toLowerCase().includes(q) || (r.comment || "").toLowerCase().includes(q));
+        return inSelf || inReplies;
+      })
+    : sorted;
+
+  const visible = filtered.slice(0, limit);
 
   return (
     <div className="comments-wrapper">
@@ -124,11 +138,15 @@ const CommentsContainer = () => {
         </select>
       </div>
 
-      <div>
-        {visible.map((c, i) => (
-          <CommentItem key={i} comment={c} />
-        ))}
-      </div>
+      {filtered.length === 0 ? (
+        <div className="text-gray-600 py-4">No comments match "{searchQuery}"</div>
+      ) : (
+        <div>
+          {visible.map((c, i) => (
+            <CommentItem key={i} comment={c} />
+          ))}
+        </div>
+      )}
 
       {limit < comments.length && (
         <div className="mt-4 text-center">
