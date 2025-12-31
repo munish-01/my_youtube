@@ -1,18 +1,21 @@
-# React + Vite
+# Debouncing:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+typing slow = 200ms 
+typing fast = 30ms
 
-Currently, two official plugins are available:
+# Perfomance:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+iphone pro max = 14 letter * 1000 = 140000
+with debouncing= 3 API calls * 1000 = 3000
+Debouncing with 200ms
 
-## React Compiler
+if difference between 2 key strokes is <200ms - DECLINE API call
+200ms make an API call
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Cache: time complexity tro search in array = O(n) time complexity tro search in Object = O(1)
 
-Note: This will impact Vite dev & build performances.
+[i, ip, iph, iphone]
 
-## Expanding the ESLint configuration
+{ i: ip: iph: iphone: }
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+new Map();

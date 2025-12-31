@@ -1,0 +1,46 @@
+.comments-wrapper {
+  max-width: 800px;
+}
+
+.comment-card {
+  background: #ffffff;
+  border: 1px solid #e6e6f0;
+  box-shadow: 0 1px 4px rgba(16, 24, 40, 0.03);
+}
+
+.avatar {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.like-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.read-more {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.load-more-btn {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #ddd6fe;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.add-comment {
+  margin-bottom: 12px;
+}
+
+.char-count {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
